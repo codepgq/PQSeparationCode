@@ -35,19 +35,27 @@ typedef void(^CellConfigBlock)(id _Nullable cell, id _Nullable item);
 
 //提供方法更新，删除,获取
 - (void)pq_insertValueWithItem:(NSInteger)item value:(id _Nullable)value{
-//    if (item < self.valuesArray.count && ) {
-//        
-//    }
-    [self.valuesArray insertObject:value atIndex:item];
+    if ([self canEditArray:item]) {
+       [self.valuesArray insertObject:value atIndex:item];
+    }
 }
 - (void)pq_deleteValueWithItem:(NSInteger)item{
-    [self.valuesArray removeObjectAtIndex:item];
+    if ([self canEditArray:item]) {
+        [self.valuesArray removeObjectAtIndex:item];
+    }
 }
 - (id _Nullable)pq_valueWithItem:(NSInteger)item{
-    if (item < self.valuesArray.count && item >= 0) {
+    if ([self canEditArray:item]) {
         return self.valuesArray[item];
     }
     return nil;
+}
+
+- (BOOL)canEditArray:(NSInteger)item{
+    if (item < self.valuesArray.count && item >= 0) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)pq_updateWithArray:(NSArray *)array{
